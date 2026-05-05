@@ -439,7 +439,7 @@ export default function OverviewPage() {
                         </span>
                         {hasStock && available && typeof product.stock === "number" && (
                           <span className="rounded-full bg-[#fff8df] px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[#8a6420]">
-                            CÃ²n {product.stock}
+                            Còn {product.stock}
                           </span>
                         )}
                         {!available && (
