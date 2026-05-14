@@ -8,6 +8,7 @@ import Footer from "@/src/components/Footer";
 import ProductVisual from "@/src/components/ProductVisual";
 import ShopHeader from "@/src/components/ShopHeader";
 import apiClient from "@/src/services/apiClient";
+import { addCartItem } from "@/src/services/cartService";
 import type { Product } from "@/src/types/product";
 import type { User } from "@/src/types/user";
 import {
@@ -56,6 +57,9 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [cartMessage, setCartMessage] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -118,6 +122,33 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleAddToCart = async () => {
+    if (!product) {
+      return;
+    }
+
+    setAddingToCart(true);
+    setCartMessage("");
+
+    try {
+      await addCartItem(product._id, quantity);
+      router.push("/cart");
+    } catch (addError) {
+      const status = axios.isAxiosError(addError)
+        ? addError.response?.status
+        : undefined;
+
+      if (status === 401 || status === 403) {
+        router.push("/login");
+        return;
+      }
+
+      setCartMessage(apiMessage(addError, "Không thể thêm sản phẩm vào giỏ."));
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
   if (loading) {
     return (
       <main className="grid min-h-screen place-items-center bg-[#f8f1ec] text-[#7f5149]">
@@ -161,6 +192,10 @@ export default function ProductDetailPage() {
   const available = isProductAvailable(product);
   const mainIngredients = product.mainIngredients ?? [];
   const hasStock = productRequiresStock(product);
+  const maxQuantity =
+    hasStock && typeof product.stock === "number" ? product.stock : undefined;
+  const reachedQuantityLimit =
+    maxQuantity !== undefined && quantity >= maxQuantity;
 
   return (
     <main className="min-h-screen bg-[#f8f1ec] text-[#4f342f]">
@@ -212,7 +247,7 @@ export default function ProductDetailPage() {
             </span>
           </div>
 
-          <h1 className="mt-5 font-serif text-4xl font-bold leading-tight text-[#8d143d] sm:text-5xl">
+          <h1 className="mt-5 font-sans text-4xl font-extrabold leading-tight text-[#8d143d] sm:text-5xl">
             {product.name}
           </h1>
 
@@ -267,20 +302,59 @@ export default function ProductDetailPage() {
             )}
           </dl>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <button
-              className="h-12 rounded-full bg-[#c33a78] px-8 text-sm font-bold text-white shadow-[0_14px_26px_rgba(195,58,120,0.22)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45"
-              disabled={!available}
-              type="button"
-            >
-              Thêm vào giỏ
-            </button>
-            <Link
-              className="inline-flex h-12 items-center rounded-full bg-white px-7 text-sm font-bold text-[#2f7560] shadow-sm ring-1 ring-[#d7e3dc] transition hover:-translate-y-0.5"
-              href="/overview#san-pham"
-            >
-              Xem thêm bánh
-            </Link>
+          <div className="mt-8 space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <div className="grid grid-cols-[2.5rem_3rem_2.5rem] overflow-hidden rounded-full bg-white text-sm font-bold text-[#5a342f] shadow-sm ring-1 ring-[#eaded8]">
+                <button
+                  aria-label="Giảm số lượng"
+                  className="grid h-12 place-items-center transition hover:bg-[#fff7fa] disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={quantity <= 1 || addingToCart}
+                  onClick={() =>
+                    setQuantity((currentQuantity) =>
+                      Math.max(1, currentQuantity - 1),
+                    )
+                  }
+                  type="button"
+                >
+                  -
+                </button>
+                <span className="grid h-12 place-items-center">
+                  {quantity}
+                </span>
+                <button
+                  aria-label="Tăng số lượng"
+                  className="grid h-12 place-items-center transition hover:bg-[#fff7fa] disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={!available || addingToCart || reachedQuantityLimit}
+                  onClick={() =>
+                    setQuantity((currentQuantity) => currentQuantity + 1)
+                  }
+                  type="button"
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                className="h-12 rounded-full bg-[#c33a78] px-8 text-sm font-bold text-white shadow-[0_14px_26px_rgba(195,58,120,0.22)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45"
+                disabled={!available || addingToCart}
+                onClick={handleAddToCart}
+                type="button"
+              >
+                {addingToCart ? "Đang thêm..." : "Thêm vào giỏ"}
+              </button>
+              <Link
+                className="inline-flex h-12 items-center rounded-full bg-white px-7 text-sm font-bold text-[#2f7560] shadow-sm ring-1 ring-[#d7e3dc] transition hover:-translate-y-0.5"
+                href="/overview#san-pham"
+              >
+                Xem thêm bánh
+              </Link>
+            </div>
+
+            {cartMessage && (
+              <p className="rounded-lg border border-[#f2c3d4] bg-[#fff0f5] px-4 py-3 text-sm font-semibold text-[#b4235d]">
+                {cartMessage}
+              </p>
+            )}
           </div>
         </article>
       </section>

@@ -301,7 +301,7 @@ export default function OverviewPage() {
       >
         <div className="mb-9 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="font-['Segoe_UI',Arial,sans-serif] text-4xl font-extrabold text-[#8d143d]">
+            <h2 className="font-sans text-4xl font-extrabold text-[#8d143d]">
               Sản phẩm trong tiệm
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#7f6d69]">
@@ -448,7 +448,7 @@ export default function OverviewPage() {
                           </span>
                         )}
                       </div>
-                      <h3 className="mt-4 font-serif text-2xl font-bold text-[#6d2b31]">
+                      <h3 className="mt-4 font-sans text-2xl font-extrabold leading-tight text-[#6d2b31]">
                         {product.name}
                       </h3>
                       <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#8d7974]">
@@ -476,7 +476,7 @@ export default function OverviewPage() {
         id="diem-xuyet"
       >
         <div>
-          <h2 className="font-['Segoe_UI',Arial,sans-serif] text-4xl font-extrabold text-[#8d143d]">
+          <h2 className="font-sans text-4xl font-extrabold text-[#8d143d]">
             Điểm xuyết nghệ thuật
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-[#7f6d69]">

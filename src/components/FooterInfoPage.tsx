@@ -39,7 +39,7 @@ export default function FooterInfoPage({
         <span className="inline-flex rounded-full bg-[#f7d6c9] px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#b73375]">
           {eyebrow}
         </span>
-        <h1 className="mt-5 max-w-3xl font-['Segoe_UI',Arial,sans-serif] text-4xl font-extrabold leading-tight text-[#8d143d] sm:text-5xl">
+        <h1 className="mt-5 max-w-3xl font-sans text-4xl font-extrabold leading-tight text-[#8d143d] sm:text-5xl">
           {title}
         </h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-[#7f6d69]">

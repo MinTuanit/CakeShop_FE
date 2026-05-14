@@ -68,10 +68,10 @@ export default function ShopHeader({
             </label>
           )}
 
-          <button
+          <Link
             aria-label="Giỏ hàng"
             className="grid h-9 w-9 place-items-center rounded-full text-[#9a2a54] transition hover:bg-white"
-            type="button"
+            href="/cart"
           >
             <svg
               aria-hidden="true"
@@ -88,7 +88,7 @@ export default function ShopHeader({
               <circle cx="9" cy="20" r="1" />
               <circle cx="17" cy="20" r="1" />
             </svg>
-          </button>
+          </Link>
 
           <div className="relative">
             <button

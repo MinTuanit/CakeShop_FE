@@ -178,7 +178,7 @@ export default function LoginPage() {
               className="absolute inset-0 bg-[radial-gradient(circle_at_68%_18%,rgba(255,122,147,0.34)_0,rgba(255,122,147,0)_28%),radial-gradient(circle_at_48%_45%,rgba(255,255,255,0.58)_0,rgba(255,255,255,0)_32%),linear-gradient(135deg,rgba(255,255,255,0.36),rgba(244,185,170,0.36))]"
             />
             <article className="relative mb-2 w-full max-w-[22rem] rounded-[1.35rem] bg-white/90 p-8 shadow-[0_22px_48px_rgba(119,75,68,0.18)]">
-              <blockquote className="font-['Segoe_UI',Arial,sans-serif] text-xl font-semibold italic leading-8 text-[#9b7168]">
+              <blockquote className="font-sans text-xl font-semibold italic leading-8 text-[#9b7168]">
                 “Sự chú trọng đến từng chi tiết trong từng miếng bánh thực sự
                 rất đáng kinh ngạc. Đặt hàng từ MT giống như đang ủy thác
                 một tác phẩm nghệ thuật.”
