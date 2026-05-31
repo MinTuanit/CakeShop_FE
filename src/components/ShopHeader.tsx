@@ -146,6 +146,29 @@ export default function ShopHeader({
                   </div>
                 )}
 
+                <Link
+                  className="flex w-full items-center justify-between border-t border-[#f0e5e0] px-5 py-3 text-left text-sm font-semibold text-[#6c514c] transition hover:bg-[#fff7fa] hover:text-[#b73375]"
+                  href="/orders"
+                  onClick={() => setAccountMenuOpen(false)}
+                >
+                  <span>Lịch sử đơn hàng</span>
+                  <svg
+                    aria-hidden="true"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M7 7h10" />
+                    <path d="M7 12h10" />
+                    <path d="M7 17h6" />
+                    <rect height="18" rx="2" width="16" x="4" y="3" />
+                  </svg>
+                </Link>
+
                 <button
                   className="flex w-full items-center justify-between border-t border-[#f0e5e0] px-5 py-3 text-left text-sm font-bold text-[#b73375] transition hover:bg-[#fff0f5]"
                   onClick={() => {

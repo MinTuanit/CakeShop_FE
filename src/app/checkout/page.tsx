@@ -9,12 +9,14 @@ import ShopHeader from "@/src/components/ShopHeader";
 import apiClient from "@/src/services/apiClient";
 import { getMyCart } from "@/src/services/cartService";
 import { createOrderFromCart } from "@/src/services/orderService";
+import { createVnpayPaymentUrl } from "@/src/services/paymentService";
 import type { Cart } from "@/src/types/cart";
 import type { Order } from "@/src/types/order";
 import type { User } from "@/src/types/user";
 import { formatCurrency } from "@/src/utils/products";
 
 type UserResponse = User | { user?: User } | null | undefined;
+type PaymentMethod = "cash" | "vnpay";
 
 type CheckoutForm = {
   customerName: string;
@@ -96,7 +98,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
   const [form, setForm] = useState<CheckoutForm>({
     customerName: "",
     deliveryAddress: "",
@@ -227,12 +229,39 @@ export default function CheckoutPage() {
     setSubmitting(true);
     setError("");
 
+    let createdOrder: Order | null = null;
+
     try {
       const response = await createOrderFromCart(payload);
-      setConfirmedOrder(response.data);
+      const order = response.data;
+      createdOrder = order;
+
+      if (paymentMethod === "vnpay") {
+        const paymentResponse = await createVnpayPaymentUrl({
+          orderId: order._id,
+          locale: "vn",
+        });
+
+        window.location.assign(paymentResponse.data.paymentUrl);
+        return;
+      }
+
+      setConfirmedOrder(order);
       setCart(null);
     } catch (submitError) {
-      setError(apiMessage(submitError, "Không thể tạo đơn hàng."));
+      if (paymentMethod === "vnpay" && createdOrder) {
+        setConfirmedOrder(createdOrder);
+        setCart(null);
+      }
+
+      setError(
+        apiMessage(
+          submitError,
+          paymentMethod === "vnpay"
+            ? "Không thể mở cổng thanh toán VNPay."
+            : "Không thể tạo đơn hàng.",
+        ),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -294,9 +323,9 @@ export default function CheckoutPage() {
                 </Link>
                 <Link
                   className="inline-flex h-11 items-center rounded-full bg-white px-7 text-sm font-bold text-[#2f7560] ring-1 ring-[#d7e3dc]"
-                  href="/cart"
+                  href="/orders"
                 >
-                  Về giỏ hàng
+                  Xem lịch sử đơn hàng
                 </Link>
               </div>
             </div>
@@ -404,48 +433,48 @@ export default function CheckoutPage() {
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <label
                     className={`flex cursor-pointer items-start justify-between gap-4 rounded-lg border p-4 transition ${
-                      paymentMethod === "cod"
+                      paymentMethod === "cash"
                         ? "border-[#d85691] bg-[#fff7fa]"
                         : "border-[#eaded8] bg-[#fbf8f5]"
                     }`}
                   >
                     <span>
                       <span className="block text-sm font-bold text-[#5a342f]">
-                        Thanh toán khi nhận bánh
+                        Tiền mặt
                       </span>
                       <span className="mt-1 block text-xs leading-5 text-[#8d7974]">
-                        Xác nhận với tiệm trước khi giao.
+                        Thanh toán trực tiếp khi nhận bánh.
                       </span>
                     </span>
                     <input
-                      checked={paymentMethod === "cod"}
+                      checked={paymentMethod === "cash"}
                       className="mt-1 h-4 w-4 accent-[#c33a78]"
                       name="payment"
-                      onChange={() => setPaymentMethod("cod")}
+                      onChange={() => setPaymentMethod("cash")}
                       type="radio"
                     />
                   </label>
 
                   <label
                     className={`flex cursor-pointer items-start justify-between gap-4 rounded-lg border p-4 transition ${
-                      paymentMethod === "wallet"
+                      paymentMethod === "vnpay"
                         ? "border-[#d85691] bg-[#fff7fa]"
                         : "border-[#eaded8] bg-[#fbf8f5]"
                     }`}
                   >
                     <span>
                       <span className="block text-sm font-bold text-[#5a342f]">
-                        Ví điện tử
+                        VNPay
                       </span>
                       <span className="mt-1 block text-xs leading-5 text-[#8d7974]">
-                        Ghi nhận đơn trước, thanh toán theo hướng dẫn.
+                        Chuyển sang cổng VNPay để thanh toán online.
                       </span>
                     </span>
                     <input
-                      checked={paymentMethod === "wallet"}
+                      checked={paymentMethod === "vnpay"}
                       className="mt-1 h-4 w-4 accent-[#c33a78]"
                       name="payment"
-                      onChange={() => setPaymentMethod("wallet")}
+                      onChange={() => setPaymentMethod("vnpay")}
                       type="radio"
                     />
                   </label>
@@ -524,8 +553,12 @@ export default function CheckoutPage() {
                 type="submit"
               >
                 {submitting
-                  ? "Đang gửi đơn..."
-                  : `Xác nhận đặt hóa đơn ${formatCurrency(totalPrice)}`}
+                  ? paymentMethod === "vnpay"
+                    ? "Đang mở VNPay..."
+                    : "Đang gửi đơn..."
+                  : paymentMethod === "vnpay"
+                    ? `Thanh toán VNPay ${formatCurrency(totalPrice)}`
+                    : `Xác nhận đặt hóa đơn ${formatCurrency(totalPrice)}`}
               </button>
             )}
 
