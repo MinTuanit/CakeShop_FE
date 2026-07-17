@@ -91,6 +91,7 @@ export default function OverviewPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const router = useRouter();
+  const isAdmin = user?.role?.toLowerCase() === "admin";
 
   const hasActiveFilters = useMemo(
     () =>
@@ -292,6 +293,76 @@ export default function OverviewPage() {
               </div>
             </div> */}
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 pb-10 lg:px-8">
+        <div className="overflow-hidden rounded-3xl border border-[#eaded8] bg-white shadow-[0_18px_42px_rgba(108,63,57,0.08)]">
+          <div className="grid gap-6 bg-[linear-gradient(135deg,#fff7fa,#fffdfb)] p-6 lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
+            <div>
+              <span className="inline-flex rounded-full bg-[#f7d6c9] px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#b73375]">
+                Mục lục cá nhân
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold text-[#8d143d]">
+                Truy cập nhanh các khu vực của bạn
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#7f6d69]">
+                Từ đây bạn có thể đi đến giỏ hàng, lịch sử đơn hàng, phần sản phẩm hoặc quay lại khu vực nổi bật của trang.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Link
+                className="flex items-center justify-between rounded-2xl border border-[#eaded8] bg-white px-4 py-4 text-sm font-semibold text-[#5a342f] transition hover:-translate-y-0.5 hover:border-[#f0bfd0] hover:shadow-sm"
+                href="/orders"
+              >
+                <span>Lịch sử đơn hàng</span>
+                <span aria-hidden="true" className="text-[#b73375]">→</span>
+              </Link>
+
+              <Link
+                className="flex items-center justify-between rounded-2xl border border-[#eaded8] bg-white px-4 py-4 text-sm font-semibold text-[#5a342f] transition hover:-translate-y-0.5 hover:border-[#f0bfd0] hover:shadow-sm"
+                href="/cart"
+              >
+                <span>Giỏ hàng của tôi</span>
+                <span aria-hidden="true" className="text-[#b73375]">→</span>
+              </Link>
+
+              <Link
+                className="flex items-center justify-between rounded-2xl border border-[#eaded8] bg-white px-4 py-4 text-sm font-semibold text-[#5a342f] transition hover:-translate-y-0.5 hover:border-[#f0bfd0] hover:shadow-sm"
+                href="#san-pham"
+              >
+                <span>Xem sản phẩm</span>
+                <span aria-hidden="true" className="text-[#b73375]">→</span>
+              </Link>
+
+              <Link
+                className="flex items-center justify-between rounded-2xl border border-[#eaded8] bg-white px-4 py-4 text-sm font-semibold text-[#5a342f] transition hover:-translate-y-0.5 hover:border-[#f0bfd0] hover:shadow-sm"
+                href="#diem-xuyet"
+              >
+                <span>Điểm xuyết nghệ thuật</span>
+                <span aria-hidden="true" className="text-[#b73375]">→</span>
+              </Link>
+            </div>
+          </div>
+
+          {isAdmin && (
+            <div className="flex flex-col gap-3 border-t border-[#eaded8] bg-[#fbf7f6] px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+              <div>
+                <p className="text-sm font-semibold text-[#5a342f]">Khu vực quản trị</p>
+                <p className="mt-1 text-xs text-[#8d7974]">
+                  Bạn đang đăng nhập với quyền admin, có thể chuyển sang trang quản trị để xử lý đơn hàng và sản phẩm.
+                </p>
+              </div>
+
+              <Link
+                className="inline-flex h-11 items-center justify-center rounded-full bg-[#8d143d] px-5 text-sm font-bold text-white shadow-[0_14px_26px_rgba(141,20,61,0.18)] transition hover:-translate-y-0.5 hover:bg-[#b73375]"
+                href="/admin"
+              >
+                Chuyển sang trang quản trị
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

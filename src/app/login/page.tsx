@@ -19,12 +19,17 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await apiClient.post(
+      const res = await apiClient.post(
         "/auth/login",
         { phone, password },
         { withCredentials: true },
       );
-      router.push("/overview");
+      const role = res?.data?.user?.role;
+      if (role && role.toLowerCase() === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/overview");
+      }
     } catch (err) {
       const message = axios.isAxiosError<{ message?: string }>(err)
         ? err.response?.data?.message
