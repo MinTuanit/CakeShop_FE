@@ -1,29 +1,109 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Props = {
   collapsed?: boolean;
   onToggle?: () => void;
+  onCreateOrderClick?: () => void;
 };
 
-export default function AdminSidebar({ collapsed = false, onToggle }: Props) {
+export default function AdminSidebar({
+  collapsed = false,
+  onToggle,
+  onCreateOrderClick,
+}: Props) {
+  const pathname = usePathname();
+
+  const navItems = [
+    {
+      href: "/admin",
+      label: "Tổng quan",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" strokeWidth="1.8" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" strokeWidth="1.8" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" strokeWidth="1.8" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" strokeWidth="1.8" />
+        </svg>
+      ),
+    },
+    {
+      href: "/admin/orders",
+      label: "Đơn hàng",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
+    {
+      href: "/admin/products",
+      label: "Sản phẩm",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" strokeWidth="1.8" fill="none" />
+        </svg>
+      ),
+    },
+    {
+      href: "/admin/ingredients",
+      label: "Nguyên liệu",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
+    {
+      href: "/admin/users",
+      label: "Tài khoản",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="12" cy="7" r="4" strokeWidth="1.8" />
+        </svg>
+      ),
+    },
+    {
+      href: "/admin/settings",
+      label: "Cài đặt",
+      icon: (
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeWidth="1.5" />
+          <circle cx="12" cy="12" r="3" strokeWidth="1.5" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-full overflow-hidden bg-white p-3 shadow-sm transition-width duration-200 ${collapsed ? "w-16" : "w-64"
-        }`}
+      className={`fixed left-0 top-0 z-40 h-full overflow-y-auto bg-[#fffaf8] p-4 border-r border-[#f4e8e1] transition-all duration-200 ${
+        collapsed ? "w-20" : "w-64"
+      }`}
     >
       <div className="flex h-full flex-col justify-between">
         <div>
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_35%_25%,#ffd2a5,#d94b69_42%,#14546a_100%)] grid place-items-center text-sm font-bold text-white">MT</div>
-              {!collapsed && (
-                <span className="text-sm font-semibold text-[#5a342f]">Danh mục quản lý</span>
-              )}
-            </div>
+          {/* Header Brand */}
+          <div className="mb-8 flex items-center justify-between px-2 pt-2">
+            {!collapsed ? (
+              <div>
+                <Link href="/admin" className="font-serif text-xl font-bold text-[#8d143d] tracking-tight block">
+                  Velvet & Crumb
+                </Link>
+                <span className="text-[0.65rem] font-bold tracking-widest text-[#a88a83] uppercase block mt-0.5">
+                  QUẢN TRỊ VIÊN
+                </span>
+              </div>
+            ) : (
+              <div className="mx-auto font-serif text-lg font-bold text-[#8d143d]">VC</div>
+            )}
 
             <button
               aria-label={collapsed ? "Mở sidebar" : "Thu gọn sidebar"}
-              className="-mr-1 rounded p-1 text-sm text-[#7d6a66] hover:bg-[#f8f1ec]"
+              className="rounded-full p-1.5 text-[#8d7974] hover:bg-[#f5e9e2] transition"
               onClick={onToggle}
               type="button"
             >
@@ -33,85 +113,65 @@ export default function AdminSidebar({ collapsed = false, onToggle }: Props) {
                 fill="none"
                 stroke="currentColor"
               >
-                <path d="M7 6l5 4-5 4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 6l5 4-5 4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
 
-          <nav className="space-y-1">
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-semibold text-[#5a342f] hover:bg-[#fff7fa] ${collapsed ? "justify-center" : ""}`}
-              href="/admin"
-            >
-              <span className="h-8 w-8 rounded-full bg-[#fbe6ef] grid place-items-center text-[#b73375]">
-                <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <rect x="3" y="3" width="8" height="8" rx="1" strokeWidth="1.5" />
-                  <rect x="13" y="3" width="8" height="8" rx="1" strokeWidth="1.5" />
-                  <rect x="3" y="13" width="8" height="8" rx="1" strokeWidth="1.5" />
-                  <rect x="13" y="13" width="8" height="8" rx="1" strokeWidth="1.5" />
-                </svg>
-              </span>
-              {!collapsed && <span>Tổng quan</span>}
-            </Link>
+          {/* Navigation items */}
+          <nav className="space-y-2">
+            {navItems.map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/admin" && pathname.startsWith(item.href));
 
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-semibold text-[#7d6a66] hover:bg-[#fff7fa] ${collapsed ? "justify-center" : ""}`}
-              href="/admin/orders"
-            >
-              <span className="h-8 w-8 rounded-full bg-[#fff0f5] grid place-items-center text-[#bf5a3f]">
-                <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M8 6h13" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M8 12h13" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M8 18h13" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <rect x="2" y="4" width="4" height="16" rx="1" strokeWidth="1.5" />
-                </svg>
-              </span>
-              {!collapsed && <span>Đơn hàng</span>}
-            </Link>
-
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-semibold text-[#7d6a66] ${collapsed ? "justify-center" : ""}`}
-              href="/admin/products"
-            >
-              <span className="h-8 w-8 rounded-full bg-[#fff4ef] grid place-items-center text-[#7d6a66]">
-                <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" strokeWidth="1.2" />
-                </svg>
-              </span>
-              {!collapsed && <span>Sản phẩm</span>}
-            </Link>
-
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-semibold text-[#7d6a66] ${collapsed ? "justify-center" : ""}`}
-              href="/admin/ingredients"
-            >
-              <span className="h-8 w-8 rounded-full bg-[#fff7f3] grid place-items-center text-[#7d6a66]">
-                <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 2c2.21 0 4 1.79 4 4 0 3.31-4 7-4 7s-4-3.69-4-7c0-2.21 1.79-4 4-4z" strokeWidth="1.5" />
-                  <path d="M6 18c1.5-2 4-3 6-3s4.5 1 6 3" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              {!collapsed && <span>Nguyên liệu</span>}
-            </Link>
-
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-semibold text-[#7d6a66] ${collapsed ? "justify-center" : ""}`}
-              href="/admin/settings"
-            >
-              <span className="h-8 w-8 rounded-full bg-[#f3eefb] grid place-items-center text-[#7d6a66]">
-                <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" strokeWidth="1.2" />
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 0 1 2.27 16.9l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09c.7 0 1.3-.4 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 0 1 6.37 2.27l.06.06c.5.5 1.2.7 1.82.33.5-.28 1.08-.28 1.58 0 .62.37 1.32.17 1.82-.33l.06-.06A2 2 0 0 1 14 2.27l.06.06c.5.5 1.2.7 1.82.33.5-.28 1.08-.28 1.58 0 .62.37 1.32.17 1.82-.33l.06-.06A2 2 0 0 1 21.73 6.37l-.06.06c-.28.5-.28 1.08 0 1.58.37.62.17 1.32-.33 1.82l-.06.06A2 2 0 0 1 19.4 15z" strokeWidth="0.6" />
-                </svg>
-              </span>
-              {!collapsed && <span>Cài đặt</span>}
-            </Link>
+              return (
+                <Link
+                  key={item.href}
+                  className={`flex items-center gap-3.5 rounded-full px-4 py-3 text-sm font-semibold transition-all ${
+                    isActive
+                      ? "bg-[#b73375] text-white shadow-md shadow-[#b73375]/20"
+                      : "text-[#7d6a66] hover:bg-[#f6eae3] hover:text-[#5a342f]"
+                  } ${collapsed ? "justify-center px-0" : ""}`}
+                  href={item.href}
+                >
+                  <span className={`shrink-0 ${isActive ? "text-white" : "text-[#7d6a66]"}`}>
+                    {item.icon}
+                  </span>
+                  {!collapsed && <span>{item.label}</span>}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
-        <div className="mt-4 text-center text-xs text-[#8d7974]">v.1.0</div>
+        {/* Bottom CTA button */}
+        <div className="pt-6 pb-2">
+          {!collapsed ? (
+            <button
+              onClick={onCreateOrderClick}
+              type="button"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#b73375] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition active:scale-98"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Tạo đơn mới</span>
+            </button>
+          ) : (
+            <button
+              onClick={onCreateOrderClick}
+              type="button"
+              title="Tạo đơn mới"
+              className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-[#b73375] text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition"
+            >
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
     </aside>
   );
 }
-

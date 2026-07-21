@@ -3,6 +3,7 @@ import type {
   CreateOrderFromCartPayload,
   CreateOrderPayload,
   Order,
+  OrderStatus,
 } from "@/src/types/order";
 
 export function createOrder(payload: CreateOrderPayload) {
@@ -19,6 +20,14 @@ export function getMyOrders() {
   return apiClient.get<Order[]>("/orders", { withCredentials: true });
 }
 
+export function getAllOrders() {
+  return apiClient.get<Order[]>("/orders/all", { withCredentials: true });
+}
+
 export function getMyOrder(orderId: string) {
   return apiClient.get<Order>(`/orders/${orderId}`, { withCredentials: true });
+}
+
+export function updateOrderStatus(orderId: string, status: OrderStatus) {
+  return apiClient.patch<Order>(`/orders/${orderId}/status`, { status }, { withCredentials: true });
 }
