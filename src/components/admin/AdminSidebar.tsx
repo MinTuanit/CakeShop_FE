@@ -13,8 +13,7 @@ type Props = {
 
 export default function AdminSidebar({
   collapsed = false,
-  onToggle,
-  onCreateOrderClick,
+  onToggle
 }: Props) {
   const pathname = usePathname();
   const [adminUser, setAdminUser] = useState<{ name: string; role: string; avatar?: string } | null>(null);
@@ -95,9 +94,8 @@ export default function AdminSidebar({
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-full overflow-y-auto bg-[#fffaf8] p-4 border-r border-[#f4e8e1] transition-all duration-200 ${
-        collapsed ? "w-20" : "w-64"
-      }`}
+      className={`fixed left-0 top-0 z-40 h-full overflow-y-auto bg-[#fffaf8] p-4 border-r border-[#f4e8e1] transition-all duration-200 ${collapsed ? "w-20" : "w-64"
+        }`}
     >
       <div className="flex h-full flex-col justify-between">
         <div>
@@ -106,14 +104,14 @@ export default function AdminSidebar({
             {!collapsed ? (
               <div>
                 <Link href="/admin" className="font-serif text-xl font-bold text-[#8d143d] tracking-tight block">
-                  Velvet & Crumb
+                  MT CakeShop
                 </Link>
                 <span className="text-[0.65rem] font-bold tracking-widest text-[#a88a83] uppercase block mt-0.5">
                   QUẢN TRỊ VIÊN
                 </span>
               </div>
             ) : (
-              <div className="mx-auto font-serif text-lg font-bold text-[#8d143d]">VC</div>
+              <div className="mx-auto font-serif text-lg font-bold text-[#8d143d]">MT</div>
             )}
 
             <button
@@ -143,11 +141,10 @@ export default function AdminSidebar({
               return (
                 <Link
                   key={item.href}
-                  className={`flex items-center gap-3.5 rounded-full px-4 py-3 text-sm font-semibold transition-all ${
-                    isActive
-                      ? "bg-[#b73375] text-white shadow-md shadow-[#b73375]/20"
-                      : "text-[#7d6a66] hover:bg-[#f6eae3] hover:text-[#5a342f]"
-                  } ${collapsed ? "justify-center px-0" : ""}`}
+                  className={`flex items-center gap-3.5 rounded-full px-4 py-3 text-sm font-semibold transition-all ${isActive
+                    ? "bg-[#b73375] text-white shadow-md shadow-[#b73375]/20"
+                    : "text-[#7d6a66] hover:bg-[#f6eae3] hover:text-[#5a342f]"
+                    } ${collapsed ? "justify-center px-0" : ""}`}
                   href={item.href}
                 >
                   <span className={`shrink-0 ${isActive ? "text-white" : "text-[#7d6a66]"}`}>
@@ -162,32 +159,6 @@ export default function AdminSidebar({
 
         {/* Bottom CTA button & Profile */}
         <div className="pt-6 pb-2 border-t border-[#f4e8e1] space-y-4">
-          <div>
-            {!collapsed ? (
-              <button
-                onClick={onCreateOrderClick}
-                type="button"
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[#b73375] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition active:scale-98"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span>Tạo đơn mới</span>
-              </button>
-            ) : (
-              <button
-                onClick={onCreateOrderClick}
-                type="button"
-                title="Tạo đơn mới"
-                className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-[#b73375] text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition"
-              >
-                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            )}
-          </div>
-
           {/* User Profile */}
           <div className={`flex items-center gap-3 pt-2 ${collapsed ? "justify-center" : "px-2"}`}>
             <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#f4e8e1] bg-[#fdfaf8]">

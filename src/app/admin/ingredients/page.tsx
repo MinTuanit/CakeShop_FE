@@ -113,12 +113,13 @@ export default function AdminIngredientsPage() {
             avatarUrl:
               item.imageUrl ||
               "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&auto=format&fit=crop&q=80",
-            status:
+            status: (
               (item.quantity ?? 10) <= 2
                 ? "critical"
                 : (item.quantity ?? 10) <= 30
-                ? "low"
-                : "stable",
+                  ? "low"
+                  : "stable"
+            ) as IngredientStatus,
           }));
           setIngredients(mapped);
         }
@@ -170,8 +171,6 @@ export default function AdminIngredientsPage() {
       price: priceNum,
       category: newCategory,
       status,
-      avatarUrl:
-        "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&auto=format&fit=crop&q=80",
     };
 
     try {
@@ -400,16 +399,6 @@ export default function AdminIngredientsPage() {
                       {/* NGUYÊN LIỆU */}
                       <td className="py-5 px-6">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 overflow-hidden rounded-full bg-[#f4e8e1] shrink-0 border border-[#efe3db]">
-                            <img
-                              src={
-                                item.avatarUrl ||
-                                "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&auto=format&fit=crop&q=80"
-                              }
-                              alt={item.name}
-                              className="h-full w-full object-cover"
-                            />
-                          </div>
                           <div>
                             <div className="font-bold text-[#5a342f]">{item.name}</div>
                             <div className="text-xs text-[#a89590]">
@@ -422,9 +411,8 @@ export default function AdminIngredientsPage() {
                       {/* SỐ LƯỢNG TỒN */}
                       <td className="py-5 px-6">
                         <span
-                          className={`font-extrabold text-base ${
-                            isLow ? "text-[#dc2626]" : "text-[#5a342f]"
-                          }`}
+                          className={`font-extrabold text-base ${isLow ? "text-[#dc2626]" : "text-[#5a342f]"
+                            }`}
                         >
                           {Number(item.quantity).toFixed(1)}
                         </span>
@@ -491,11 +479,10 @@ export default function AdminIngredientsPage() {
                 key={pageNum}
                 type="button"
                 onClick={() => setCurrentPage(pageNum)}
-                className={`h-8 w-8 rounded-full font-bold transition ${
-                  currentPage === pageNum
-                    ? "bg-[#aa2e63] text-white shadow-sm"
-                    : "bg-white border border-[#f0e2db] text-[#7d6a66] hover:bg-[#faf4f1]"
-                }`}
+                className={`h-8 w-8 rounded-full font-bold transition ${currentPage === pageNum
+                  ? "bg-[#aa2e63] text-white shadow-sm"
+                  : "bg-white border border-[#f0e2db] text-[#7d6a66] hover:bg-[#faf4f1]"
+                  }`}
               >
                 {pageNum}
               </button>
