@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "@/src/services/userService";
 
 type Props = {
   collapsed?: boolean;
@@ -15,6 +17,19 @@ export default function AdminSidebar({
   onCreateOrderClick,
 }: Props) {
   const pathname = usePathname();
+  const [adminUser, setAdminUser] = useState<{ name: string; role: string; avatar?: string } | null>(null);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((res) => {
+        if (res.data?.user) {
+          setAdminUser(res.data.user);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch admin user in sidebar", err);
+      });
+  }, []);
 
   const navItems = [
     {
@@ -145,31 +160,60 @@ export default function AdminSidebar({
           </nav>
         </div>
 
-        {/* Bottom CTA button */}
-        <div className="pt-6 pb-2">
-          {!collapsed ? (
-            <button
-              onClick={onCreateOrderClick}
-              type="button"
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#b73375] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition active:scale-98"
-            >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Tạo đơn mới</span>
-            </button>
-          ) : (
-            <button
-              onClick={onCreateOrderClick}
-              type="button"
-              title="Tạo đơn mới"
-              className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-[#b73375] text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition"
-            >
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          )}
+        {/* Bottom CTA button & Profile */}
+        <div className="pt-6 pb-2 border-t border-[#f4e8e1] space-y-4">
+          <div>
+            {!collapsed ? (
+              <button
+                onClick={onCreateOrderClick}
+                type="button"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[#b73375] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition active:scale-98"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>Tạo đơn mới</span>
+              </button>
+            ) : (
+              <button
+                onClick={onCreateOrderClick}
+                type="button"
+                title="Tạo đơn mới"
+                className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-[#b73375] text-white shadow-lg shadow-[#b73375]/25 hover:bg-[#9c265f] transition"
+              >
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 5v14M5 12h14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* User Profile */}
+          <div className={`flex items-center gap-3 pt-2 ${collapsed ? "justify-center" : "px-2"}`}>
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#f4e8e1] bg-[#fdfaf8]">
+              {adminUser?.avatar ? (
+                <img
+                  src={adminUser.avatar}
+                  alt={adminUser.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-[#fce7ef] font-serif text-sm font-bold text-[#b73375]">
+                  {(adminUser?.name || "MA")[0].toUpperCase()}
+                </div>
+              )}
+            </div>
+            {!collapsed && (
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate text-sm font-bold text-[#5a342f]">
+                  {adminUser?.name || "Marie Antoinette"}
+                </p>
+                <p className="truncate text-xs font-semibold text-[#a88a83] uppercase tracking-wider">
+                  {adminUser?.role === "admin" ? "chủ cửa hàng" : "nhân viên"}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </aside>
