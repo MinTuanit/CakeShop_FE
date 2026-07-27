@@ -7,6 +7,7 @@ import type { ImportItem, IngredientStatus, CreateImportPayload } from "@/src/ty
 import type { Product } from "@/src/types/product";
 import { AddImportDialog, DeleteImportDialog } from "@/src/components/admin/ingredients/components";
 import { formatDate } from "@/src/utils/date";
+import { formatCurrency } from "@/src/utils/products";
 
 export default function AdminIngredientsPage() {
   const [ingredients, setIngredients] = useState<
@@ -232,6 +233,7 @@ export default function AdminIngredientsPage() {
             <thead className="bg-[#faf4f1] text-[0.7rem] font-bold uppercase tracking-wider text-[#9a8580] border-b border-[#f0e2db]">
               <tr>
                 <th className="py-4 px-6">NGUYÊN LIỆU</th>
+                <th className="py-4 px-6">GIÁ NHẬP</th>
                 <th className="py-4 px-6">SỐ LƯỢNG NHẬP</th>
                 <th className="py-4 px-6">ĐƠN VỊ</th>
                 <th className="py-4 px-6">NHÀ CUNG CẤP</th>
@@ -269,6 +271,16 @@ export default function AdminIngredientsPage() {
                             </div>
                           </div>
                         </div>
+                      </td>
+
+                      {/* GIÁ */}
+                      <td className="py-5 px-6">
+                        <span
+                          className={`font-extrabold text-base ${isLow ? "text-[#dc2626]" : "text-[#5a342f]"
+                            }`}
+                        >
+                          {formatCurrency(item.price)}
+                        </span>
                       </td>
 
                       {/* SỐ LƯỢNG TỒN */}
