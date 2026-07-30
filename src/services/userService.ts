@@ -60,3 +60,15 @@ export function getCurrentUser() {
     withCredentials: true,
   });
 }
+
+export function createUser(data: Partial<UserItem> & { password?: string }) {
+  return apiClient.post<{ user: UserItem }>("/users", data, {
+    withCredentials: true,
+  });
+}
+
+export function updateUser(userId: string, data: Partial<UserItem> & { password?: string }) {
+  return apiClient.put<{ user: UserItem }>(`/users/${userId}`, data, {
+    withCredentials: true,
+  });
+}
